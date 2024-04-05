@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>ROGUELIKE GAME</title>
+		<link
+			href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i|Tinos:400,400isubset=cyrillic"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="src/styles.css">
+	</head>
+	<body onload="game.init()">
+		<h3 style='margin: 0 0 10px;'>Игровое поле</h3>
+		<div class="field-box">
+			<div class="field">
+				<canvas id="mainScreen" width="1280" height="700" class='tileW'></canvas>
+				<pre id="screen"><pre>
+			</div>
+		</div>
+		<div class="cl"></div>
+		<h3>Инвентарь</h3>
+		<div class="inventory-box">
+			<ul class="inventory"></ul>
+		</div>
+	<script src="lib/easeljs-0.8.1.min.js"></script>
+	<script src="lib/soundjs-0.6.1.min.js"></script>
+	<script src="src/utils.js"></script>
+	<script src="src/map.js"></script>
+	<script src="src/entity.js"></script>
+	<script src="src/rpgMaterials.js"></script>
+	<script src="src/randomGenerator.js"></script>
+	<script src="src/game.js"></script>
+	</body>
+</html>
