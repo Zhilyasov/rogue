@@ -352,7 +352,7 @@ Player.prototype.move = function (dir) {
 					game.makeNextLevel()
 				} else {
 					game.message('Под тобой ' + item + '.')
-					console.log(item)
+					// console.log(item)
 				}
 			}
 		}
@@ -469,10 +469,6 @@ Player.prototype.interact = function () {
 	}
 }
 
-
-
-
-
 Player.prototype.getMonsterAdjacentDirection = function () {
 	var point = this.getPosition()
 	var monsterPoint = null
@@ -507,10 +503,6 @@ Player.prototype.getMonsterAdjacentDirection = function () {
 
 	return null
 }
-
-
-
-
 
 Player.prototype.getHp = function () {
 	return this.stats.hp

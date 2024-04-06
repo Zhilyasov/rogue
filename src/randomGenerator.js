@@ -138,7 +138,7 @@ var random = {
 			if (map.cellAt(floorPos).getItem() !== null) continue
 
 			var chest = new Chest('Сундук')
-			chest.setImage(new createjs.Bitmap('images/items/chest.png'))
+			chest.setImage(new createjs.Bitmap('images/items/Сундук.png'))
 			chest.setPosition(floorPos)
 			map.add(chest)
 		}
@@ -186,7 +186,7 @@ var random = {
 		}
 
 		var stairs = new Item('Stairs')
-		stairs.setImage(new createjs.Bitmap('images/items/stairs.png'))
+		stairs.setImage(new createjs.Bitmap('images/items/Лестница.png'))
 		stairs.setPosition(stairsPos)
 		stairs.setType('stairs')
 		map.add(stairs)

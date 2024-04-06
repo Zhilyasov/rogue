@@ -25,31 +25,32 @@ h3 {
 }
 .field .tile {
 	background-size: 32px;
-	background-image: url(../images/textures/tile-.png);
+	background-image: url(../images/trash/tile-.png);
 	z-index: 5;
 }
 .field .tileW {
-	background-image: url(../images/textures/tile-W.png);
+	background-image: url(../images/textures/Wall.png);
 	background-repeat: repeat;
 	background-size: 32px;
 }
 .field .tileE {
-	background-image: url(../images/textures/tile-E.png);
+	background-image: url(../images/trash/tile-E.png);
 	z-index: 10;
 }
 .field .tileP {
-	background-image: url(../images/tile-P.png);
+	background-image: url(../images/trash/tile-P.png);
 	z-index: 10;
 }
 .field .tileHP {
-	background-image: url(../images/tile-HP.png);
+	background-image: url(../images/trash/tile-HP.png);
 	z-index: 9;
 }
 .field .tileSW {
-	background-image: url(../images/items/tile-SW.png);
+	position: relative;
+	background-image: url(../images/trash/tile-SW.png);
 	z-index: 9;
 }
-.field .tile .health {
+.health {
 	background-color: #ff0000;
 	z-index: 11;
 	position: absolute;
@@ -57,12 +58,12 @@ h3 {
 	top: 0px;
 	height: 3px;
 }
-.field .tileP .health {
+.playerHealth {
 	background-color: #00ff00;
 	z-index: 11;
 	position: absolute;
-	left: 0px;
-	top: 0px;
+	left: 640px;
+	top: 345px;
 	height: 3px;
 }
 .inventory-box {
@@ -70,14 +71,14 @@ h3 {
 	float: left;
 	padding: 10px;
 	color: chartreuse;
-	background-image: url('../images/textures/tile-.png');
+	background-image: url('../images/trash/tile-.png');
 	background-repeat: repeat;
 	background-size: contain;
 }
 .inventory {
 	position: relative;
 	width: 1260px;
-	min-height: 56px;
+	min-height: 72px;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -87,4 +88,11 @@ h3 {
 .cl {
 	clear: both;
 	display: block;
+}
+
+.entities {
+	width: 32px;
+	position: absolute;
+	margin: 0;
+	padding: 0;
 }

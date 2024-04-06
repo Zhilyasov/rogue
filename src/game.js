@@ -41,7 +41,7 @@ var game = {
 		this.stage = this.stage || new createjs.Stage('mainScreen')
 		this.player = new Player('Игрок')
 		this.player.setCode('@')
-		this.player.setImage(new createjs.Bitmap('images/Player-32.png'))
+		this.player.setImage(new createjs.Bitmap('images/Player.png'))
 
 		this.map = random.map(1)
 		this.stage.addChild(this.background)
@@ -353,21 +353,54 @@ var game = {
 
 	customInventory: function () {
 		var nowInventory = this.player.inventory.items
+		console.log(nowInventory)
 
-		document.querySelector('.inventory').innerHTML = nowInventory.map(function (
-			el
-		) {
-			return (
-				'<li style="display: flex; flex-direction: column; align-items: center; margin: 0 10px 5px 0; width: 160px">' +
-				'<img style="width: 30px; height: 30px" src="images/items/' +
-				el +
-				'.png"></img>' +
-				'<p style="margin: 5px 0 0; font-size: 14px; max-width: 160px; text-align: center;">' +
-				el +
-				'</p>' +
-				'</li>'
-			)
-		})
+		document.querySelector('.inventory').innerHTML = nowInventory
+			.map(function (el) {
+				return (
+					'<li style="display: flex; flex-direction: column; align-items: center; margin: 0 10px 5px 0; width: 160px">' +
+					'<img style="width: 30px; height: 30px" src="images/items/' +
+					el +
+					'.png"></img>' +
+					'<p style="margin: 5px 0 0; font-size: 14px; max-width: 160px; text-align: center;">' +
+					el +
+					'</p>' +
+					'</li>'
+				)
+			})
+			.join('')
+	},
+
+	customHPBar: function (dataGame) {
+		//количество хп игрока сейчас
+		var playerHP = this.player.stats.hp 
+		
+		if (playerHP > 0) { // Если жив
+			// Player HP bar
+			//нужный коэффициент
+			var playerHPcoefficient = (100 / this.player.stats.maxHp).toFixed(2) 
+	
+			// Позиция игрока на карте
+			var playerOnMap = this.player.map 
+	
+			// Monsters HP bar
+			// список врагов на карте
+			var monstersOnMap = this.player.map.enemies
+			console.log(monstersOnMap)
+				
+			document.querySelector('.entities').innerHTML = ('<div class="playerHealth" style="width: ' + Math.floor(playerHP * playerHPcoefficient) + '%;"></div>' + monstersOnMap.map(function (el) {
+				var monsterHP = el.hp //количество хп врага сейчас
+				var monsterHPcoefficient = (100 / el.maxHp).toFixed(2) //нужный коэффициент
+				return (
+					'<div class="health" style="width: ' +
+					Math.floor(monsterHP * monsterHPcoefficient) +
+					'%;">' +
+					'</div>'
+				)
+			})
+			.join(''))
+		} else { // Убираем Player HP bar
+			document.querySelector('.entities').innerHTML = '<div class="playerHealth" style="width: 0%;"></div>'}
 	},
 
 	showCharacterSheet: function (show) {
@@ -413,7 +446,6 @@ var game = {
 		var code = e.keyCode
 
 		if (game.state == 'game') {
-			game.customInventory()
 			if (code == 65) {
 				// a: left
 				game.player.move(new Vector(-1, 0))
@@ -538,7 +570,9 @@ var game = {
 			}
 		}
 
+		game.customInventory()
 		game.update()
+		game.customHPBar(game)
 	},
 
 	updateHelpText: function () {
@@ -557,4 +591,5 @@ var game = {
 			this.helpString = 'Команды: Клавиша R чтобы перезапустить.'
 		}
 	},
+	// playerHPcoefficient: (100 / game.player.stats.maxHp).toFixed(2) //нужный коэффициент
 }
