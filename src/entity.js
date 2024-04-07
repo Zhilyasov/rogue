@@ -219,7 +219,6 @@ Stats.prototype.addEncounterLevel = function (levels) {
 Stats.prototype.levelUp = function () {
 	++this.level
 	game.message('Ты повысил уровень! Теперь ты ' + this.level + ' уровня.')
-	//this.maxHp += + random.die(1, 6);
 	this.maxHp += +random.die(3, 6)
 	this.hp = this.maxHp
 	if (this.level % 3 == 0) {
@@ -270,7 +269,6 @@ Character.prototype.applyDamage = function (damage) {
 
 	if (!this.isAlive()) {
 		var cell = this.map.cellAt(this.getPosition())
-		//cell.setCode("%");
 
 		// Randomly drop an item
 		if (cell.getItem() === null && random.integer(10) < 3) {
@@ -351,7 +349,6 @@ Player.prototype.move = function (dir) {
 					game.makeNextLevel()
 				} else {
 					game.message('Под тобой ' + item + '.')
-					// console.log(item)
 				}
 			}
 		}
@@ -734,7 +731,7 @@ Chest.prototype.isBlockable = function () {
 	return false
 }
 
-// class Door
+// class Door - убрал
 // var Door = function (keyType) {
 // 	Entity.call(this, 'Door')
 // 	this.setType('door')

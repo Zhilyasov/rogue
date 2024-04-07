@@ -1,4 +1,3 @@
-// singleton Game
 // The main game logic
 var game = {
 	map: null,
@@ -23,42 +22,6 @@ var game = {
 			.beginFill('rgba(0, 32, 255, 255)')
 			.drawRect(0, 0, 640, 55)
 	),
-	// HP panel
-	// messageHP: new createjs.Shape(
-	// 	new createjs.Graphics()
-	// 		.beginFill('rgba(0, 255, 0, 1)')
-	// 		.drawRect(0, -5, 32, 3)
-	// ),
-
-	// messageHPfn: function () {
-	// 	var array = game.player.container.children
-
-	// 	for (var i = 0; i < array.length; ++i) {
-	// 		if (array[i].image.outerHTML === '<img src="images/Player.png">') {
-	// 			var shape = new createjs.Shape(
-	// 				new createjs.Graphics()
-	// 					.beginFill('rgba(0, 255, 0, 1)')
-	// 					.drawRect(0, -5, 32, 3)
-	// 			)
-	// 			shape.name = array[i].id
-
-	// 			// console.log('shape.name')
-	// 			console.log(shape.name)
-
-	// 			this.messages.addChild(shape)
-	// 		} else {
-	// 			var shape = new createjs.Shape(
-	// 				new createjs.Graphics()
-	// 					.beginFill('rgba(255, 0, 0, 1)')
-	// 					.drawRect(0, -5, 32, 3)
-	// 			)
-	// 			shape.name = array[i].id
-	// 			console.log(shape.name)
-	// 			this.messages.addChild(shape)
-	// 		}
-	// 	}
-	// },
-
 	messageText: new createjs.Text(),
 	lastFiveMessages: [],
 	informationPanel: new createjs.Shape(
@@ -72,7 +35,6 @@ var game = {
 	init: function () {
 		if (this.stage) this.reset()
 
-		this.loadSounds()
 		soundLevelComplete.play()
 		this.stage = this.stage || new createjs.Stage('mainScreen')
 		this.player = new Player('Игрок')
@@ -88,7 +50,6 @@ var game = {
 		this.messageText.text = ' '
 
 		this.messages.addChild(this.messagePanel)
-		// this.messages.addChild(this.messageHP)
 
 		this.messageText.font = '10px Arial'
 		this.messageText.color = '#ffffff'
@@ -108,17 +69,6 @@ var game = {
 		// Window event callback
 		window.onkeydown = this.onKeyPressed
 		window.setInterval(this.tick, 1000)
-	},
-
-	// Звуки
-	loadSounds: function () {
-		// var soundInventoryScreen = new Audio('sounds/panel.mp3')
-		// var soundOpenChest = new Audio('sounds/openChest.mp3')
-		// var soundGame_over = new Audio('sounds/game_over.mp3')
-		// var soundLevelComplete = new Audio('sounds/levelComplete.mp3')
-		// var soundHit = new Audio('sounds/hit.mp3')
-		// var soundHurt = new Audio('sounds/hurt.mp3')
-		// var soundStep_1 = new Audio('sounds/step_1.mp3')
 	},
 
 	reset: function () {
@@ -157,10 +107,6 @@ var game = {
 		game.showCustomHPBar()
 		this.stage.update()
 	},
-
-	// playSound: function (sound) {
-	// 	sound.play()
-	// },
 
 	updateMessagePanel: function () {
 		// Позиция правого синего бэкграунда на экране по x и y
@@ -324,84 +270,17 @@ var game = {
 	},
 
 	showCustomHPBar: function () {
-		//количество хп игрока сейчас
-		// this.messageHPfn()
-
-		// Позиция ХПБара по x и y
-		// var msgs = game.messages.children
-		// for (var i = 0; i < msgs.length; ++i) {
-		// 	if (msgs[i].graphics) {
-		// 		if (msgs[i].graphics._fill.style === 'rgba(0, 255, 0, 1)') {
-		// 			game.messages.children[i].x = game.player.getPosition().x * 32
-		// 			game.messages.children[i].y = game.player.getPosition().y * 32
-		// 	// var hpBarWidth = game.messageHP.graphics.command.w // default 32
-		// }
-		// else if (msgs[i].graphics._fill.style === 'rgba(255, 0, 0, 1)') {
-		// 	var enemies = game.player.map.enemies
-		// 	console.log('enemies')
-		// 	console.log(enemies)
-		// 	for (let monster = 0; monster < enemies.length; monster++) {
-		// 		console.log(enemies[i])
-		// 		// game.messages.children[i].x = (enemies[i].getPosition().x + i) * 32
-		// 		// game.messages.children[i].y = (game.player.getPosition().y + i) * 32
-		// 	}
-		// }
-		// 	}
-		// }
-
-		// console.log(this)
-
-		// var point = game.player.map.player.getPosition()
-		// var playerPoint = null
-
-		// var cell = game.player.map.cellAt(point.add(new Vector(0, -1)))
-		// console.log(cell)
-
-		// if (cell && cell.getEntity() && cell.getEntity().getType() == 'enemy') {
-		// 	playerPoint = cell.getEntity().getPosition()
-		// }
-
-		// console.log(playerPoint)
-
-		// if (playerPoint) {
-		// 	return playerPoint.subtract(point)
-		// }
-
-		// return null
-
-		// var upPos = this.player.getPosition().add(new Vector(0, -1))
-		// var up = game.map.cellAt(upPos)
-		// console.log(up)
-
+	
 		var playerHP = this.player.stats.hp
 
 		if (playerHP > 0 && (game.state === 'init' || game.state === 'game')) {
 			// Player HP bar
 			// нужный коэффициент
 			var playerHPcoefficient = (100 / this.player.stats.maxHp).toFixed(2)
-
-			// Monsters HP bar
-			// список врагов на карте
-			// var monstersOnMap = this.player.map.enemies
-
 			document.querySelector('.entities').innerHTML =
 				'<div class="playerHealth" style="width: ' +
 				Math.floor(playerHP * playerHPcoefficient) +
 				'%;"></div>'
-
-			// + monstersOnMap
-			// 	.map(function (el) {
-			// 		var monsterHP = el.hp //количество хп врага сейчас
-			// 		var monsterHPcoefficient = (100 / el.maxHp).toFixed(2) //нужный коэффициент
-
-			// 		// return (
-			// 		// 	'<div class="health" style="width: ' +
-			// 		// 	Math.floor(monsterHP * monsterHPcoefficient) +
-			// 		// 	'%;">' +
-			// 		// 	'</div>'
-			// 		// )
-			// 	})
-			// 	.join('')
 		} else {
 			// Убираем Player HP bar
 			document.querySelector('.entities').innerHTML =
