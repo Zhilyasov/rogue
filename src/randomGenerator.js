@@ -129,7 +129,7 @@ var random = {
 
 		// Добавить рандомное количество сундуков, мечей, хилок
 		var numChests = this.integerRange(1, 5)
-		var numSwords = this.integerRange(2, 3)
+		var numSwords = this.integerRange(1, 2)
 		var numPoisons = this.integerRange(6, 12)
 
 		// Сундуки

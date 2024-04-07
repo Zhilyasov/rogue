@@ -73,7 +73,7 @@ var game = {
 		if (this.stage) this.reset()
 
 		this.loadSounds()
-		// this.playSound(soundLevelComplete)
+		soundLevelComplete.play()
 		this.stage = this.stage || new createjs.Stage('mainScreen')
 		this.player = new Player('Игрок')
 		this.player.setCode('@')
@@ -222,7 +222,7 @@ var game = {
 	showInventory: function (show) {
 		var container = game.inventory
 
-		this.playSound(soundInventoryScreen)
+		soundInventoryScreen.play()
 
 		if (show) {
 			this.stage.addChild(container)
@@ -376,7 +376,6 @@ var game = {
 		var playerHP = this.player.stats.hp
 
 		if (playerHP > 0 && (game.state === 'init' || game.state === 'game')) {
-			console.log(game.state)
 			// Player HP bar
 			// нужный коэффициент
 			var playerHPcoefficient = (100 / this.player.stats.maxHp).toFixed(2)
@@ -413,6 +412,7 @@ var game = {
 	// Меню характеристик игрока
 	showCharacterSheet: function (show) {
 		var container = game.characterSheet
+		soundInventoryScreen.play()
 
 		if (show) {
 			this.stage.addChild(container)

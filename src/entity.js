@@ -234,7 +234,7 @@ Stats.prototype.toString = function () {
 	s += 'Уровень: ' + this.level
 	s += '\nСила: ' + this.str
 	s += '\nЛовкость: ' + this.dex
-	s += '\nРазум: ' + this.mind
+	s += '\nИнтеллект: ' + this.mind
 
 	s +=
 		'\n\nУрон: ' +
@@ -243,7 +243,7 @@ Stats.prototype.toString = function () {
 		this.damageDiceSides +
 		' + ' +
 		(this.calculateBonus(this.str) + this.level)
-	s += '\nКласс брони: ' + this.getAc()
+	s += '\nЗащита: ' + this.getAc()
 
 	return s
 }
