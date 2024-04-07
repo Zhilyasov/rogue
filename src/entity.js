@@ -1,5 +1,5 @@
 // class Entity
-// Base entity. May occupy room in the dungeon.
+// Базовая сущность. Может занять место в подземелье.
 var Entity = function (name) {
 	this.position = new Vector()
 	this.name = name || 'Странный предмет'
@@ -30,7 +30,7 @@ Entity.prototype.updatePosition = function (pos) {
 		this.image.x = this.position.x * 32
 		this.image.y = this.position.y * 32
 	}
-	game.playSound('step1')
+	soundStep.play()
 }
 
 Entity.prototype.hide = function () {
@@ -46,7 +46,7 @@ Entity.prototype.show = function () {
 		this.updatePosition()
 		this.showing = !this.showing
 	}
-	game.playSound('inventoryScreen')
+	soundInventoryScreen.play()
 }
 
 Entity.prototype.getName = function () {
@@ -204,7 +204,6 @@ Stats.prototype.getAc = function () {
 }
 
 Stats.prototype.addEncounterLevel = function (levels) {
-	// game.message("Gained " + levels + " encounter level(s).");
 
 	for (var i = 0; i < levels; ++i) {
 		++this.encounterLevel
@@ -316,7 +315,7 @@ Character.prototype.isBlockable = function () {
 }
 
 // class Player
-// The character which the player will control
+// Персонаж которого игрок будет контролировать
 var Player = function (name) {
 	Character.call(this, name)
 	this.setType('player')
@@ -348,7 +347,7 @@ Player.prototype.move = function (dir) {
 
 			if (item) {
 				if (item.getType() == 'stairs') {
-					game.playSound('levelComplete')
+					soundLevelComplete.play()
 					game.makeNextLevel()
 				} else {
 					game.message('Под тобой ' + item + '.')
@@ -370,7 +369,7 @@ Player.prototype.attack = function (other) {
 	if (roll == 20) {
 		var damage = this.stats.getMaximumDamage()
 		other.applyDamage(damage)
-		game.playSound('hit')
+		soundHit.play()
 		game.message('Ты нанёс ' + damage + ' критического урона ' + other + '.')
 	} else if (
 		roll +
@@ -380,7 +379,7 @@ Player.prototype.attack = function (other) {
 	) {
 		var damage = this.stats.rollStrDamage()
 		other.applyDamage(damage)
-		game.playSound('hit')
+		soundHit.play()
 		game.message('Ты нанёс ' + damage + ' урона ' + other + '.')
 	} else {
 		game.message('Ты промахнулся пытаясь ударить ' + other + '.')
@@ -402,7 +401,7 @@ Player.prototype.attackOnSpace = function (other) {
 	if (roll == 20) {
 		var damage = this.stats.getMaximumDamage()
 		other.applyDamage(damage)
-		game.playSound('hit')
+		soundHit.play()
 		game.message('Ты нанёс ' + damage + ' критического урона ' + other + '.')
 	} else if (
 		roll +
@@ -412,7 +411,7 @@ Player.prototype.attackOnSpace = function (other) {
 	) {
 		var damage = this.stats.rollStrDamage()
 		other.applyDamage(damage)
-		game.playSound('hit')
+		soundHit.play()
 		game.message('Ты нанёс ' + damage + ' урона ' + other + '.')
 	} else {
 		game.message('Ты промахнулся пытаясь ударить ' + other + '.')
@@ -423,7 +422,7 @@ Player.prototype.attackOnSpace = function (other) {
 	}
 }
 
-// Interact with an item the player is standing on
+// Взаимодействие с предметами на которых стоит игрок
 // подбирание предметов и сундуков
 Player.prototype.interact = function () {
 	var itemLoc = this.map.cellAt(this.getPosition())
@@ -439,7 +438,7 @@ Player.prototype.interact = function () {
 			item = this.map.cellAt(this.getPosition()).getItem()
 
 			if (item) {
-				game.playSound('openChest')
+				soundOpenChest.play()
 				game.message('Ты открыл сундук с ' + item + '.')
 			} else {
 				game.message('В сундуке пусто.')
@@ -447,7 +446,7 @@ Player.prototype.interact = function () {
 		} else if (item.getType() == 'equipment') {
 			if (this.getInventory().addItem(item)) {
 				item.pick()
-				game.playSound('switch')
+				soundSwitch.play()
 				game.message('Ты взял ' + item + '.')
 			}
 		} else if (
@@ -456,12 +455,12 @@ Player.prototype.interact = function () {
 		) {
 			if (this.getInventory().addItem(item)) {
 				item.pick()
-				game.playSound('switch')
+				soundSwitch.play()
 				game.message('Ты взял ' + item + '.')
 			}
 		} else if (item.isPickable()) {
 			if (this.getInventory().addItem(item)) {
-				game.playSound('switch')
+				soundSwitch.play()
 				game.message('Ты взял ' + item + '.')
 			}
 		}
@@ -640,7 +639,7 @@ Monster.prototype.attack = function (other) {
 			return
 		}
 		if (!game.devMode) other.applyDamage(damage)
-		game.playSound('hurt')
+		soundHurt.play()
 		game.message(this + ' нанёс тебе ' + damage + ' урона.')
 	} else {
 		game.message(this + ' промахнулся пытаясь тебя ударить.')
@@ -704,7 +703,7 @@ Monster.prototype.freezeForTurns = function (turns) {
 }
 
 // class Chest
-// Item which the player can open.
+// Предмет который игрок может открыть
 var Chest = function (name) {
 	Entity.call(this, name)
 	this.setType('chest')
@@ -714,7 +713,7 @@ var Chest = function (name) {
 Chest.prototype = Object.create(Entity.prototype)
 Chest.prototype.constructor = Chest
 
-// open chest
+// ОТкрыть сундук
 Chest.prototype.open = function () {
 	var item = random.item(
 		random.integerRange(
@@ -800,7 +799,7 @@ Item.prototype.isEquipable = function () {
 }
 
 // class Equipment
-// Equipment which the player can equip.
+// Снаряжение которое игрок может экипировать
 var Equipment = function (name) {
 	Item.call(this, name)
 	this.setType('equipment')
@@ -862,6 +861,7 @@ Equipment.prototype.toString = function () {
 }
 
 // class Sword
+// Мечи которые разбросаны на карте
 var Sword = function (name) {
 	Item.call(this, name)
 	this.setType('equipment')
@@ -892,7 +892,7 @@ Sword.prototype.pick = function () {
 }
 
 // class Consumable
-// Consumable which the player can consume.
+// Расходный предмет который игрок может использовать
 var Consumable = function (name) {
 	Item.call(this, name)
 	this.setType('consumable')
@@ -927,6 +927,7 @@ Consumable.prototype.pick = function () {
 }
 
 // class Poison
+// Хилки которые разбросаны по карте
 var Poison = function (name) {
 	Item.call(this, name)
 	this.setType('consumable')
@@ -958,7 +959,7 @@ Poison.prototype.pick = function () {
 }
 
 // class Inventory
-// Inventory for the player to hold items that can be picked up.
+// Инвентарь, в котором игрок может хранить предметы, которые можно подобрать.
 var Inventory = function (character) {
 	this.items = []
 	this.maxItems = 10

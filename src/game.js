@@ -6,7 +6,7 @@ var game = {
 	state: 'init',
 	devMode: false,
 
-	// Stage to render
+	// Этап рендеринга
 	stage: null,
 
 	// Stage containers
@@ -17,7 +17,7 @@ var game = {
 	characterSheet: new createjs.Container(),
 	messages: new createjs.Container(),
 
-	// Lower panel
+	// Lower panel с сообщениями в чате
 	messagePanel: new createjs.Shape(
 		new createjs.Graphics()
 			.beginFill('rgba(0, 32, 255, 255)')
@@ -58,6 +58,7 @@ var game = {
 	// 		}
 	// 	}
 	// },
+
 	messageText: new createjs.Text(),
 	lastFiveMessages: [],
 	informationPanel: new createjs.Shape(
@@ -72,7 +73,7 @@ var game = {
 		if (this.stage) this.reset()
 
 		this.loadSounds()
-		this.playSound('levelComplete')
+		// this.playSound(soundLevelComplete)
 		this.stage = this.stage || new createjs.Stage('mainScreen')
 		this.player = new Player('Игрок')
 		this.player.setCode('@')
@@ -111,13 +112,13 @@ var game = {
 
 	// Звуки
 	loadSounds: function () {
-		createjs.Sound.registerSound('sounds/panel.mp3', 'inventoryScreen')
-		createjs.Sound.registerSound('sounds/openChest.mp3', 'openChest')
-		createjs.Sound.registerSound('sounds/game_over.mp3', 'gameOver')
-		createjs.Sound.registerSound('sounds/level_complete.mp3', 'levelComplete')
-		createjs.Sound.registerSound('sounds/hit.mp3', 'hit')
-		createjs.Sound.registerSound('sounds/hurt.mp3', 'hurt')
-		createjs.Sound.registerSound('sounds/step_1.mp3', 'step1')
+		// var soundInventoryScreen = new Audio('sounds/panel.mp3')
+		// var soundOpenChest = new Audio('sounds/openChest.mp3')
+		// var soundGame_over = new Audio('sounds/game_over.mp3')
+		// var soundLevelComplete = new Audio('sounds/levelComplete.mp3')
+		// var soundHit = new Audio('sounds/hit.mp3')
+		// var soundHurt = new Audio('sounds/hurt.mp3')
+		// var soundStep_1 = new Audio('sounds/step_1.mp3')
 	},
 
 	reset: function () {
@@ -141,25 +142,25 @@ var game = {
 			this.map.getEnemies().forEach(function (each) {
 				each.updateAi()
 			})
-			
+
 			// При смерти игрока
 			if (!this.player.isAlive()) {
-				game.playSound('gameOver')
+				soundGame_over.play()
 				this.state = 'game_over'
 				game.message('Вы погибли. Нажмите R чтобы перезапуститься.')
 			}
-			game.showCustomHPBar()
 		}
 
 		game.updateMessagePanel()
 		game.updateInformationPanel()
-		
+
+		game.showCustomHPBar()
 		this.stage.update()
 	},
 
-	playSound: function (soundID) {
-		createjs.Sound.play(soundID)
-	},
+	// playSound: function (sound) {
+	// 	sound.play()
+	// },
 
 	updateMessagePanel: function () {
 		// Позиция правого синего бэкграунда на экране по x и y
@@ -221,7 +222,7 @@ var game = {
 	showInventory: function (show) {
 		var container = game.inventory
 
-		this.playSound('inventoryScreen')
+		this.playSound(soundInventoryScreen)
 
 		if (show) {
 			this.stage.addChild(container)
@@ -277,92 +278,7 @@ var game = {
 				playerItems.text += inventory.rightHand.toString()
 			}
 
-			// Overlay the inventory screen
-
-			// add panel
-			panel.x = this.map.getPlayer().getPosition().x * 32 - panelPos.x / 2
-			panel.y = this.map.getPlayer().getPosition().y * 32 - panelPos.y / 2
-			container.addChild(panel)
-
-			// add texts
-			var textBounds = inventoryList.getBounds()
-
-			inventoryList.x = panel.x + textBounds.width / 2
-			inventoryList.y = panel.y + textBounds.height / 2
-			container.addChild(inventoryList)
-
-			playerItems.x = panel.x + textBounds.width / 2
-			playerItems.y = panel.y + textBounds.height / 2 + 32
-			container.addChild(playerItems)
-
-			this.stage.update()
-		} else {
-			// remove the inventory list screen
-			this.inventory.removeAllChildren()
-			this.stage.update()
-		}
-	},
-
-	customStartMenu: function (show) {
-		var container = game.inventory
-
-		this.playSound('inventoryScreen')
-
-		if (show) {
-			this.stage.addChild(container)
-
-			var panel = new createjs.Shape(
-				new createjs.Graphics()
-					.beginFill('rgba(0, 32, 255, 255)')
-					.drawRect(0, 0, 640, 480)
-			)
-			var panelPos = new Vector(640, 480)
-
-			var inventoryList = new createjs.Text()
-			inventoryList.font = '20px Arial'
-			inventoryList.color = '#ffffff'
-			inventoryList.text = 'Inventory'
-
-			var playerItems = new createjs.Text()
-			playerItems.font = '16px Arial'
-			playerItems.color = '#ffffff'
-			playerItems.text = '[Items]\n'
-
-			// inventory list
-			for (var i = 0; i < this.player.getInventory().items.length; i++) {
-				var key = i + 1
-				if (key == 10) key = 0
-				playerItems.text +=
-					'(' +
-					key.toString() +
-					') ' +
-					this.player.getInventory().items[i].toString()
-				if (i < this.player.getInventory().items.length - 1)
-					playerItems.text += '\n'
-			}
-
-			var inventory = this.player.getInventory()
-
-			// Надетые предметы игрока
-			playerItems.text += '\n\n[Equipped]\nArmour: '
-
-			if (inventory.armour) {
-				playerItems.text += inventory.armour.toString()
-			}
-
-			playerItems.text += '\nLeft Hand: '
-
-			if (inventory.leftHand != null) {
-				playerItems.text += inventory.leftHand.toString()
-			}
-
-			playerItems.text += '\nRight Hand: '
-
-			if (inventory.rightHand != null) {
-				playerItems.text += inventory.rightHand.toString()
-			}
-
-			// Overlay the inventory screen
+			// Наложение экрана инвентаря
 
 			// add panel
 			panel.x = this.map.getPlayer().getPosition().x * 32 - panelPos.x / 2
@@ -418,18 +334,18 @@ var game = {
 		// 		if (msgs[i].graphics._fill.style === 'rgba(0, 255, 0, 1)') {
 		// 			game.messages.children[i].x = game.player.getPosition().x * 32
 		// 			game.messages.children[i].y = game.player.getPosition().y * 32
-					// 	// var hpBarWidth = game.messageHP.graphics.command.w // default 32
-				// } 
-				// else if (msgs[i].graphics._fill.style === 'rgba(255, 0, 0, 1)') {
-				// 	var enemies = game.player.map.enemies
-				// 	console.log('enemies')
-				// 	console.log(enemies)
-				// 	for (let monster = 0; monster < enemies.length; monster++) {
-				// 		console.log(enemies[i])
-				// 		// game.messages.children[i].x = (enemies[i].getPosition().x + i) * 32
-				// 		// game.messages.children[i].y = (game.player.getPosition().y + i) * 32
-				// 	}
-				// }
+		// 	// var hpBarWidth = game.messageHP.graphics.command.w // default 32
+		// }
+		// else if (msgs[i].graphics._fill.style === 'rgba(255, 0, 0, 1)') {
+		// 	var enemies = game.player.map.enemies
+		// 	console.log('enemies')
+		// 	console.log(enemies)
+		// 	for (let monster = 0; monster < enemies.length; monster++) {
+		// 		console.log(enemies[i])
+		// 		// game.messages.children[i].x = (enemies[i].getPosition().x + i) * 32
+		// 		// game.messages.children[i].y = (game.player.getPosition().y + i) * 32
+		// 	}
+		// }
 		// 	}
 		// }
 
@@ -459,7 +375,8 @@ var game = {
 
 		var playerHP = this.player.stats.hp
 
-		if (playerHP > 0) {
+		if (playerHP > 0 && (game.state === 'init' || game.state === 'game')) {
+			console.log(game.state)
 			// Player HP bar
 			// нужный коэффициент
 			var playerHPcoefficient = (100 / this.player.stats.maxHp).toFixed(2)
@@ -467,8 +384,6 @@ var game = {
 			// Monsters HP bar
 			// список врагов на карте
 			// var monstersOnMap = this.player.map.enemies
-
-			// +++     MAIN       +++
 
 			document.querySelector('.entities').innerHTML =
 				'<div class="playerHealth" style="width: ' +
@@ -495,6 +410,7 @@ var game = {
 		}
 	},
 
+	// Меню характеристик игрока
 	showCharacterSheet: function (show) {
 		var container = game.characterSheet
 
@@ -516,7 +432,6 @@ var game = {
 
 			// add panel
 			panel.x = this.map.getPlayer().getPosition().x * 32 - panelPos.x / 2
-			console.log(panel.x)
 			panel.y = this.map.getPlayer().getPosition().y * 32 - panelPos.y / 2
 			container.addChild(panel)
 
@@ -535,6 +450,7 @@ var game = {
 		}
 	},
 
+	// Взаимодействие с клавиатурой
 	onKeyPressed: function (e) {
 		var code = e.keyCode
 
@@ -563,6 +479,7 @@ var game = {
 			} else if (code == 73) {
 				// i: inventory
 				game.showInventory(true)
+				game.showCustomHPBar()
 				game.state = 'inventory'
 			} else if (code == 67) {
 				// c: character sheet
@@ -603,6 +520,7 @@ var game = {
 				// i: inventory
 				game.showInventory(false)
 				game.state = 'game'
+				game.showCustomHPBar()
 				return
 			} else {
 				return
@@ -634,6 +552,7 @@ var game = {
 				// i: inventory
 				game.showInventory(false)
 				game.state = 'game'
+				game.showCustomHPBar()
 				return
 			} else {
 				return
@@ -648,6 +567,7 @@ var game = {
 				//c: character sheet
 				game.showCharacterSheet(false)
 				game.state = 'game'
+				game.showCustomHPBar()
 				return
 			} else if (code == 73) {
 				// i: inventory

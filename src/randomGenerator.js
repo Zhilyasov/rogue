@@ -1,5 +1,5 @@
 // singleton Random
-// Random generator, used to generate random numbers and objects for the game
+// Генератор случайных чисел, используемый для генерации случайных чисел и объектов для игры.
 var random = {
 	integer: function (size) {
 		return Math.floor(Math.random() * size)

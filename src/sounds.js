@@ -1,0 +1,8 @@
+var soundInventoryScreen = new Audio('sounds/panel.mp3')
+var soundOpenChest = new Audio('sounds/openChest.mp3')
+var soundGame_over = new Audio('sounds/game_over.mp3')
+var soundLevelComplete = new Audio('sounds/level_complete.mp3')
+var soundHit = new Audio('sounds/hit.mp3')
+var soundHurt = new Audio('sounds/hurt.mp3')
+var soundStep = new Audio('sounds/step_1.mp3')
+var soundSwitch = new Audio('sounds/switch.mp3')
