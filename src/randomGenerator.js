@@ -88,6 +88,7 @@ var random = {
 		if (game.map) game.map.remove(game.player)
 		game.player.setPosition(center)
 		map.add(game.player)
+		game.showCustomHPBar()
 
 		// Добавить врагов от 10 до 16
 		var numEnemies = this.integerRange(10, 16)

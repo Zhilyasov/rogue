@@ -391,7 +391,6 @@ Player.prototype.attack = function (other) {
 	}
 }
 
-
 Player.prototype.attackOnSpace = function (other) {
 	var roll = random.die(1, 20)
 
@@ -469,28 +468,33 @@ Player.prototype.interact = function () {
 	}
 }
 
+// Есть ли монстр на соседних клетках
 Player.prototype.getMonsterAdjacentDirection = function () {
 	var point = this.getPosition()
 	var monsterPoint = null
 
+	// Справа
 	var cell = this.map.cellAt(point.add(new Vector(1, 0)))
 
 	if (cell && cell.getEntity() && cell.getEntity().getType() == 'enemy') {
 		monsterPoint = cell.getEntity().getPosition()
 	}
 
+	// Снизу
 	cell = this.map.cellAt(point.add(new Vector(0, 1)))
 
 	if (cell && cell.getEntity() && cell.getEntity().getType() == 'enemy') {
 		monsterPoint = cell.getEntity().getPosition()
 	}
 
+	// Слева
 	cell = this.map.cellAt(point.add(new Vector(-1, 0)))
 
 	if (cell && cell.getEntity() && cell.getEntity().getType() == 'enemy') {
 		monsterPoint = cell.getEntity().getPosition()
 	}
 
+	// Сверху
 	cell = this.map.cellAt(point.add(new Vector(0, -1)))
 
 	if (cell && cell.getEntity() && cell.getEntity().getType() == 'enemy') {
@@ -642,7 +646,7 @@ Monster.prototype.attack = function (other) {
 		game.message(this + ' промахнулся пытаясь тебя ударить.')
 	}
 }
-
+// Есть ли игрок на соседних клетках
 Monster.prototype.getPlayerAdjacentDirection = function () {
 	var point = this.getPosition()
 	var playerPoint = null
@@ -946,7 +950,7 @@ Poison.prototype.use = function () {
 
 Poison.prototype.pick = function () {
 	var item = random.poison('Исцеляющее зелье')
-	
+
 	item.setImage(new createjs.Bitmap('images/items/' + item.name + '.png'))
 	var map = game.player.map
 	map.remove(this)
